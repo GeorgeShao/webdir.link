@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Route path="/project/:id" render={(props) => <Redirect {...props} />} />
+        <Route path="/:id" render={(props) => <Redirect {...props} />} />
       </Router>
     </div>
   );
