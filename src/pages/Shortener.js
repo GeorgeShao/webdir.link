@@ -11,7 +11,8 @@ import { createShortenedLinkPair } from '../graphql/mutations';
 
 function Shortener() {
   const [urls, setURLs] = useState([]);
-  const [messageBody, setMessageBody] = useState('');
+  const [customURLBody, setCustomURLBody] = useState('');
+  const [targetURLBody, setTargetURLBody] = useState('');
 
   useEffect(() => {
     API
@@ -39,8 +40,12 @@ function Shortener() {
     };
   }, [urls]);
 
-  const handleChange = (event) => {
-    setMessageBody(event.target.value);
+  const handleCustomChange = (event) => {
+    setCustomURLBody(event.target.value);
+  };
+
+  const handleTargetChange = (event) => {
+    setTargetURLBody(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -48,13 +53,19 @@ function Shortener() {
     event.stopPropagation();
 
     const input = {
-      customURL: messageBody.trim(),
-      targetURL: "example target url"
+      customURL: customURLBody.trim(),
+      targetURL: targetURLBody.trim()
     };
 
     try {
-      setMessageBody('');
-      await API.graphql(graphqlOperation(createShortenedLinkPair, { input }))
+      if (input.customURL !== "" && input.targetURL !== ""){
+        setCustomURLBody('');
+        setTargetURLBody('');
+        await API.graphql(graphqlOperation(createShortenedLinkPair, { input }))
+        alert("Success! " + input.customURL + " --> " + input.targetURL)
+      } else {
+        alert("Please enter a custom short URL and target URL.")
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -77,10 +88,17 @@ function Shortener() {
           <Formik>
             {(props) => (
               <Form onSubmit={handleSubmit}>
-                <Field name="message">
+                <Field name="customURL">
                   {({ field, form }) => (
                     <InputGroup size="md">
-                      <Input {...field} name="message" placeholder="Enter Message..." onChange={handleChange} value={messageBody}/>
+                      <Input {...field} name="customURL" placeholder="Enter your custom short URL (eg. 123 for webdir.link/123)" onChange={handleCustomChange} value={customURLBody}/>
+                    </InputGroup>
+                  )}
+                </Field>
+                <Field name="targetURL">
+                  {({ field, form }) => (
+                    <InputGroup size="md">
+                      <Input {...field} name="targetURL" placeholder="Enter your target URL (eg. google.com)" onChange={handleTargetChange} value={targetURLBody}/>
                       <InputRightElement>
                         <IconButton h="1.75rem" size="md" marginEnd="10px" icon={<ArrowUpIcon/>} colorScheme="purple" type="submit" onSubmit={handleSubmit}/>
                       </InputRightElement>
