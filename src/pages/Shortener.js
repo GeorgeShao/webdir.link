@@ -5,9 +5,10 @@ import { Formik, Field, Form } from "formik";
 import ThemeToggle from "../components/ThemeToggle"
 import API, { graphqlOperation } from '@aws-amplify/api';
 import '@aws-amplify/pubsub';
-import { listShortenedLinkPairs } from '../graphql/queries';
+import { listShortenedLinkPairs, getShortenedLinkPair } from '../graphql/queries';
 import { onCreateShortenedLinkPair } from '../graphql/subscriptions';
 import { createShortenedLinkPair } from '../graphql/mutations';
+import { getShortenedLinkPairByCustomURL } from '../graphql/custom_queries'
 
 function Shortener() {
   const [urls, setURLs] = useState([]);
@@ -57,6 +58,14 @@ function Shortener() {
       targetURL: targetURLBody.trim()
     };
 
+    let filter = {
+        customURL: {eq: input.customURL}
+    };
+
+    var a = await API.graphql(graphqlOperation(listShortenedLinkPairs, {limit: 20, filter:filter}));
+    console.log("TADA123 ", a)
+    alert(a)
+
     try {
       if (input.customURL !== "" && input.targetURL !== ""){
         setCustomURLBody('');
@@ -79,12 +88,9 @@ function Shortener() {
             <Text fontSize="3xl" marginLeft="4" color="#815ad5">webdir.link</Text>
             <Text fontSize="md" marginLeft="4" color="#815ad5">URL Shortener</Text>
           </Box>
-          {urls.map((url) => (
-            <div key={url.id}>{url.customURL} --> {url.targetURL}</div>
-          ))}
           <Spacer />
         </Flex>
-          <Box marginTop="2">
+        <Box marginTop="2">
           <Formik>
             {(props) => (
               <Form onSubmit={handleSubmit}>
@@ -95,6 +101,7 @@ function Shortener() {
                     </InputGroup>
                   )}
                 </Field>
+                <Box margin="2"/>
                 <Field name="targetURL">
                   {({ field, form }) => (
                     <InputGroup size="md">
