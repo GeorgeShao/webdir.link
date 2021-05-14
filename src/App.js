@@ -3,17 +3,17 @@ import './App.css';
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
-import Redirect from './Redirect'
+import Redirect from './pages/Redirect'
+import Shortener from './pages/Shortener'
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Route path="/:id" render={(props) => <Redirect {...props} />} />
+        <Route exact path="/"><Shortener/></Route>
+        <Route exact path="/:id" render={(props) => <Redirect {...props} />} />
       </Router>
     </div>
   );
