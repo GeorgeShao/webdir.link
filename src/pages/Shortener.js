@@ -5,9 +5,7 @@ import { Formik, Field, Form } from "formik";
 import ThemeToggle from "../components/ThemeToggle"
 
 function Shortener() {
-  const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState('');
-  const [userInfo, setUserInfo] = useState(null);
 
   const handleChange = (event) => {
     setMessageBody(event.target.value);
@@ -29,26 +27,35 @@ function Shortener() {
       console.warn(error);
     }
   };
+
   return (
       <div>
         <Grid templateColumns="repeat(3, 1fr)">
-          <Flex></Flex>
-          <Formik>
-            {(props) => (
-              <Form onSubmit={handleSubmit}>
-                <Field name="message">
-                  {({ field, form }) => (
-                    <InputGroup size="md">
-                      <Input {...field} name="message" placeholder="Enter Message..." onChange={handleChange} value={messageBody}/>
-                      <InputRightElement>
-                        <IconButton h="1.75rem" size="md" marginEnd="10px" icon={<ArrowUpIcon/>} colorScheme="purple" type="submit" onSubmit={handleSubmit}/>
-                      </InputRightElement>
-                    </InputGroup>
-                  )}
-                </Field>
-              </Form>
-            )}
-          </Formik>
+          <Flex>
+            <Box>
+              <Text fontSize="3xl" marginLeft="4" color="#815ad5">webdir.link</Text>
+              <Text fontSize="md" marginLeft="4" color="#815ad5">URL Shortener</Text>
+            </Box>
+            <Spacer />
+          </Flex>
+            <Box marginTop="2">
+            <Formik>
+              {(props) => (
+                <Form onSubmit={handleSubmit}>
+                  <Field name="message">
+                    {({ field, form }) => (
+                      <InputGroup size="md">
+                        <Input {...field} name="message" placeholder="Enter Message..." onChange={handleChange} value={messageBody}/>
+                        <InputRightElement>
+                          <IconButton h="1.75rem" size="md" marginEnd="10px" icon={<ArrowUpIcon/>} colorScheme="purple" type="submit" onSubmit={handleSubmit}/>
+                        </InputRightElement>
+                      </InputGroup>
+                    )}
+                  </Field>
+                </Form>
+              )}
+            </Formik>
+          </Box>
           <Flex>
             <Spacer />
             <ThemeToggle />
