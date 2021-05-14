@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^1.1.0",
+    "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.1",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
@@ -11,6 +12,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "aws-amplify": "^4.0.0",
+    "formik": "^2.2.6",
     "framer-motion": "^4.1.16",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
