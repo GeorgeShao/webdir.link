@@ -1,0 +1,7 @@
+type ShortenedLinkPair @model {
+  id: ID!
+  customURL: String!
+  targetURL: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
