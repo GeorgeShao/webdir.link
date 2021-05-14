@@ -4,7 +4,10 @@ import { ArrowUpIcon } from '@chakra-ui/icons'
 import { Formik, Field, Form } from "formik";
 import ThemeToggle from "../components/ThemeToggle"
 import API, { graphqlOperation } from '@aws-amplify/api';
+import '@aws-amplify/pubsub';
 import { listShortenedLinkPairs } from '../graphql/queries';
+import { onCreateShortenedLinkPair } from '../graphql/subscriptions';
+import { createShortenedLinkPair } from '../graphql/mutations';
 
 function Shortener() {
   const [urls, setURLs] = useState([]);
@@ -22,6 +25,20 @@ function Shortener() {
       });
   }, []);
 
+  useEffect(() => {
+    const subscription = API
+      .graphql(graphqlOperation(onCreateShortenedLinkPair))
+      .subscribe({
+        next: (event) => {
+          setURLs([...urls, event.value.data.onCreateShortenedLinkPair]);
+        }
+      });
+    
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [urls]);
+
   const handleChange = (event) => {
     setMessageBody(event.target.value);
   };
@@ -31,14 +48,14 @@ function Shortener() {
     event.stopPropagation();
 
     const input = {
-      text: messageBody.trim()
+      customURL: messageBody.trim(),
+      targetURL: "example target url"
     };
 
     try {
       setMessageBody('');
-      alert('try')
+      await API.graphql(graphqlOperation(createShortenedLinkPair, { input }))
     } catch (error) {
-      alert('error')
       console.warn(error);
     }
   };
