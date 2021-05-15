@@ -5,10 +5,9 @@ import { Formik, Field, Form } from "formik";
 import ThemeToggle from "../components/ThemeToggle"
 import API, { graphqlOperation } from '@aws-amplify/api';
 import '@aws-amplify/pubsub';
-import { listShortenedLinkPairs, getShortenedLinkPair } from '../graphql/queries';
+import { listShortenedLinkPairs } from '../graphql/queries';
 import { onCreateShortenedLinkPair } from '../graphql/subscriptions';
 import { createShortenedLinkPair } from '../graphql/mutations';
-import { getShortenedLinkPairByCustomURL } from '../graphql/custom_queries'
 
 function Shortener() {
   const [urls, setURLs] = useState([]);
@@ -59,21 +58,37 @@ function Shortener() {
     };
 
     let filter = {
-        customURL: {eq: input.customURL}
+      customURL: {eq: input.customURL}
     };
 
-    var a = await API.graphql(graphqlOperation(listShortenedLinkPairs, {limit: 20, filter:filter}));
-    console.log("TADA123 ", a)
-    alert(a)
+    var alreadyExists = false
 
+    var fetched_data = await API.graphql(graphqlOperation(listShortenedLinkPairs, {limit: 1, filter:filter}));
     try {
-      if (input.customURL !== "" && input.targetURL !== ""){
+      var fetched_customURL = fetched_data.data.listShortenedLinkPairs.items[0]['customURL'];
+      var fetched_targetURL = fetched_data.data.listShortenedLinkPairs.items[0]['targetURL'];
+      console.log("retreiving: " + fetched_customURL + " --> " + fetched_targetURL);
+      alreadyExists = true;
+    } catch (error) {
+      alreadyExists = false;
+      console.warn(error);
+    }
+    
+    try {
+      if (alreadyExists === true){
+        alert("Custom short URL already exists.")
+      } else if (input.customURL === "" && input.targetURL === ""){
+        alert("Please enter a custom short URL and a target URL.")
+      } else if (input.customURL === ""){
+        alert("Please enter a custom short URL.")
+      } else if (input.targetURL === "") {
+        alert("Please enter a target URL.")
+      } else {
         setCustomURLBody('');
         setTargetURLBody('');
         await API.graphql(graphqlOperation(createShortenedLinkPair, { input }))
+        console.log("sending: " + input.customURL + " --> " + input.targetURL)
         alert("Success! " + input.customURL + " --> " + input.targetURL)
-      } else {
-        alert("Please enter a custom short URL and target URL.")
       }
     } catch (error) {
       console.warn(error);
