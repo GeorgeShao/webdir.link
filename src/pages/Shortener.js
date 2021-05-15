@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Center, Flex, Grid, Spacer, Text, Button, InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react'
+
+import { Box, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react'
 import { ArrowUpIcon } from '@chakra-ui/icons'
 import { Formik, Field, Form } from "formik";
-import ThemeToggle from "../components/ThemeToggle"
+
 import API, { graphqlOperation } from '@aws-amplify/api';
 import '@aws-amplify/pubsub';
 import { listShortenedLinkPairs } from '../graphql/queries';
 import { onCreateShortenedLinkPair } from '../graphql/subscriptions';
 import { createShortenedLinkPair } from '../graphql/mutations';
+
+import ThemeToggle from "../components/ThemeToggle"
 
 function Shortener() {
   const [urls, setURLs] = useState([]);
@@ -61,21 +64,21 @@ function Shortener() {
       customURL: {eq: input.customURL}
     };
 
-    var alreadyExists = false
+    var customURLAlreadyExists = false
 
     var fetched_data = await API.graphql(graphqlOperation(listShortenedLinkPairs, {limit: 1, filter:filter}));
     try {
       var fetched_customURL = fetched_data.data.listShortenedLinkPairs.items[0]['customURL'];
       var fetched_targetURL = fetched_data.data.listShortenedLinkPairs.items[0]['targetURL'];
       console.log("retreiving: " + fetched_customURL + " --> " + fetched_targetURL);
-      alreadyExists = true;
+      customURLAlreadyExists = true;
     } catch (error) {
-      alreadyExists = false;
-      console.warn(error);
+      customURLAlreadyExists = false;
+      console.error(error);
     }
     
     try {
-      if (alreadyExists === true){
+      if (customURLAlreadyExists === true){
         alert("Custom short URL already exists.")
       } else if (input.customURL === "" && input.targetURL === ""){
         alert("Please enter a custom short URL and a target URL.")
@@ -91,7 +94,7 @@ function Shortener() {
         alert("Success! " + input.customURL + " --> " + input.targetURL)
       }
     } catch (error) {
-      console.warn(error);
+      console.error(error);
     }
   };
 
