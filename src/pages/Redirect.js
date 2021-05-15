@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react'
 
+import { useToast } from '@chakra-ui/react'
+
 import API, { graphqlOperation } from '@aws-amplify/api';
 import '@aws-amplify/pubsub';
 import { listShortenedLinkPairs } from '../graphql/queries';
 
 function Redirect(props) {
   const { shortlink } = props.match.params
+  const toast = useToast()
 
   useEffect(() => {
     const fetchTargetURL = async () => {
@@ -20,17 +23,30 @@ function Redirect(props) {
         var fetched_customURL = fetched_data.data.listShortenedLinkPairs.items[0]['customURL'];
         var fetched_targetURL = fetched_data.data.listShortenedLinkPairs.items[0]['targetURL'];
         console.log("redirecting: " + fetched_customURL + " --> " + fetched_targetURL);
-        window.location.href = fetched_data.data.listShortenedLinkPairs.items[0]['targetURL'];
+        window.location.href = fetched_targetURL
+        toast({
+          title: "Redirecting...",
+          description: fetched_customURL + " --> " + fetched_targetURL,
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        })
       } catch (error) {
         console.error(error);
-        alert("Custom URL does not exist.")
+        toast({
+          title: "Invalid custom short URL",
+          description: fetched_customURL + " --> " + fetched_targetURL,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
       }
     }
     fetchTargetURL()
-  }, [shortlink]);
+  }, [shortlink, toast]);
 
   return (
-    <p>{shortlink}</p>
+    <p>Redirecting...<b>{shortlink}</b>...</p>
   )
 }
 

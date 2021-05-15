@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Box, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react'
+import { Box, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton, useToast } from '@chakra-ui/react'
 import { ArrowUpIcon } from '@chakra-ui/icons'
 import { Formik, Field, Form } from "formik";
 
@@ -16,6 +16,7 @@ function Shortener() {
   const [urls, setURLs] = useState([]);
   const [customURLBody, setCustomURLBody] = useState('');
   const [targetURLBody, setTargetURLBody] = useState('');
+  const toast = useToast()
 
   useEffect(() => {
     API
@@ -66,7 +67,7 @@ function Shortener() {
 
     var customURLAlreadyExists = false
 
-    var fetched_data = await API.graphql(graphqlOperation(listShortenedLinkPairs, {limit: 1, filter:filter}));
+    var fetched_data = await API.graphql(graphqlOperation(listShortenedLinkPairs, {filter:filter}));
     try {
       var fetched_customURL = fetched_data.data.listShortenedLinkPairs.items[0]['customURL'];
       var fetched_targetURL = fetched_data.data.listShortenedLinkPairs.items[0]['targetURL'];
@@ -79,19 +80,49 @@ function Shortener() {
     
     try {
       if (customURLAlreadyExists === true){
-        alert("Custom short URL already exists.")
+        toast({
+          title: "Custom short URL taken",
+          description: "? --> ?",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
       } else if (input.customURL === "" && input.targetURL === ""){
-        alert("Please enter a custom short URL and a target URL.")
+        toast({
+          title: "Missing URLs",
+          description: "? --> ?",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
       } else if (input.customURL === ""){
-        alert("Please enter a custom short URL.")
+        toast({
+          title: "Missing custom short URL",
+          description: "? --> " + input.targetURL,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
       } else if (input.targetURL === "") {
-        alert("Please enter a target URL.")
+        toast({
+          title: "Missing target URL",
+          description: input.customURL + " --> ?",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
       } else {
         setCustomURLBody('');
         setTargetURLBody('');
         await API.graphql(graphqlOperation(createShortenedLinkPair, { input }))
         console.log("sending: " + input.customURL + " --> " + input.targetURL)
-        alert("Success! " + input.customURL + " --> " + input.targetURL)
+        toast({
+          title: "Custom short URL created",
+          description: input.customURL + " --> " + input.targetURL,
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        })
       }
     } catch (error) {
       console.error(error);
