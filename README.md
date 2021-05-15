@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# webdir.link
+An online link shortener built with AWS.
+
+**Built With:** React, Chakra UI, and AWS (Amplify, AppSync, DynamoDB, GraphQL)
+
+**Hosted App URL: [https://webdir.link/](https://webdir.link/)**
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
