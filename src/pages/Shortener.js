@@ -154,7 +154,7 @@ function Shortener() {
                 <Field name="targetURL">
                   {({ field, form }) => (
                     <InputGroup size="md">
-                      <Input {...field} name="targetURL" placeholder="Enter your target URL (eg. google.com)" onChange={handleTargetChange} value={targetURLBody}/>
+                      <Input {...field} name="targetURL" placeholder="Enter your full target URL (eg. http://www.google.com)" onChange={handleTargetChange} value={targetURLBody}/>
                       <InputRightElement>
                         <IconButton h="1.75rem" size="md" marginEnd="10px" icon={<ArrowUpIcon/>} colorScheme="purple" type="submit" onSubmit={handleSubmit}/>
                       </InputRightElement>
