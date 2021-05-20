@@ -15,7 +15,7 @@ function Redirect(props) {
       console.log("shortlink:", shortlink)
 
       let filter = {
-        customURL: {eq: shortlink.trim()}
+        customURL: {eq: shortlink.trim().toLowerCase()}
       };
 
       var fetched_data = await API.graphql(graphqlOperation(listShortenedLinkPairs, {filter:filter}));

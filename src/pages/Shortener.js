@@ -57,7 +57,7 @@ function Shortener() {
     event.stopPropagation();
 
     const input = {
-      customURL: customURLBody.trim(),
+      customURL: customURLBody.trim().toLowerCase(),
       targetURL: targetURLBody.trim()
     };
 
