@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { Box, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton, useToast } from '@chakra-ui/react'
-import { ArrowUpIcon } from '@chakra-ui/icons'
+import { Box, Link, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton, useToast } from '@chakra-ui/react'
+import { ArrowUpIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { Formik, Field, Form } from "formik";
 
 import API, { graphqlOperation } from '@aws-amplify/api';
@@ -164,6 +164,15 @@ function Shortener() {
               </Form>
             )}
           </Formik>
+          <br/>
+          <Text fontSize="md" marginLeft="4" color="#815ad5">Made with ❤️ by George Shao</Text>
+          <Link color="#815ad5" href="https://www.linkedin.com/in/george-shao/" isExternal>
+            Let's connect on LinkedIn! <ExternalLinkIcon mx="2px" />
+          </Link>
+          <Text fontSize="md" marginLeft="4" color="#815ad5"> </Text>
+          <Link color="#815ad5" href="https://github.com/GeorgeShao/webdir.link" isExternal>
+            This project is open source! Check it out on GitHub! <ExternalLinkIcon mx="2px" />
+          </Link>
         </Box>
         <Flex>
           <Spacer />
