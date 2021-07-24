@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Box, Link, Flex, Grid, Spacer, Text, InputGroup, Input, InputRightElement, IconButton, useToast } from '@chakra-ui/react'
+import { Box, Link, Flex, Grid, Spacer, Text, Image, InputGroup, Input, InputRightElement, IconButton, useToast } from '@chakra-ui/react'
 import { ArrowUpIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import { Formik, Field, Form } from "formik";
 
@@ -134,8 +134,9 @@ function Shortener() {
       <Grid templateColumns="repeat(3, 1fr)">
         <Flex>
           <Box>
-            <Text fontSize="3xl" marginLeft="4" color="#815ad5">webdir.link</Text>
-            <Text fontSize="md" marginLeft="4" color="#815ad5">URL Shortener</Text>
+            <Image marginLeft="4" src={process.env.PUBLIC_URL + "logo192.png"} boxSize="100px" alt="webdir.link" align="center"/>
+            <Text fontSize="3xl" marginLeft="4" color="#815ad5" textAlign="left">webdir.link</Text>
+            <Text fontSize="md" marginLeft="4" color="#815ad5" textAlign="left">URL Shortener</Text>
           </Box>
           <Spacer />
         </Flex>
