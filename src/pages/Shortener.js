@@ -167,7 +167,7 @@ function Shortener() {
           </Formik>
           <br/>
           <Text fontSize="md" marginLeft="4" color="#815ad5">Made with ❤️ by George Shao</Text>
-          <Link color="#815ad5" href="https://www.linkedin.com/in/george-shao/" isExternal>
+          <Link color="#815ad5" href="https://www.linkedin.com/in/georgeshao/" isExternal>
             Let's connect on LinkedIn! <ExternalLinkIcon mx="2px" />
           </Link>
           <Text fontSize="md" marginLeft="4" color="#815ad5"> </Text>
