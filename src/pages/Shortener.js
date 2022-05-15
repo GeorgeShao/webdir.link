@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IconContext } from "react-icons";
 import { RiLinkedinFill } from "react-icons/ri";
 import { AiFillGithub } from "react-icons/ai";
 import { MdAddLink } from "react-icons/md";
@@ -103,34 +102,34 @@ function Shortener() {
     try {
       if (customURLAlreadyExists === true) {
         toast({
-          title: "Custom short URL taken",
-          description: "? --> ?",
+          title: "Error",
+          description: "Sorry, custom short link taken",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
-      } else if (input.customURL === "" && input.targetURL === "") {
+      } else if (!input.targetURL.includes("http://") && !input.targetURL.includes("https://")) {
         toast({
-          title: "Missing URLs",
-          description: "? --> ?",
+          title: "Error with original long link",
+          description: "Original long url must include http:// or https://",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
-      } else if (input.customURL === "") {
+      } else if (input.customURL.includes("http://") || input.customURL.includes("https://") || input.customURL.includes("www.") || input.customURL.includes("/")) {
         toast({
-          title: "Missing custom short URL",
-          description: "? --> " + input.targetURL,
+          title: "Error with custom short link",
+          description: "Please only type the part after webdir.link/ above. Do not include http:// or https:// or www. or /",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
-      } else if (input.targetURL === "") {
+      } else if (input.targetURL === "" || input.customURL === "") {
         toast({
-          title: "Missing target URL",
-          description: input.customURL + " --> ?",
+          title: "Error",
+          description: "Missing link(s)",
           status: "error",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
       } else {
@@ -140,9 +139,9 @@ function Shortener() {
         console.log("sending: " + input.customURL + " --> " + input.targetURL);
         toast({
           title: "Custom short URL created",
-          description: input.customURL + " --> " + input.targetURL,
+          description: "webdir.link/" + input.customURL + " --> " + input.targetURL,
           status: "success",
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
       }
@@ -173,20 +172,25 @@ function Shortener() {
         <Formik>
           {(props) => (
             <Form onSubmit={handleSubmit}>
+              <Text fontSize="xs" textAlign="left" marginLeft="1" marginTop="2" color="grey"> 
+                Example: https://linkedin.com/in/georgeshao
+              </Text>
               <Field name="targetURL">
                 {({ field, form }) => (
                   <InputGroup size="md">
                     <Input
                       {...field}
                       name="targetURL"
-                      placeholder="Enter long link here"
+                      placeholder="Enter original long link here"
                       onChange={handleTargetChange}
                       value={targetURLBody}
-                      marginTop="2"
                     />
                   </InputGroup>
                 )}
               </Field>
+              <Text fontSize="xs" textAlign="left" marginLeft="1" marginTop="2" color="grey"> 
+                  Example: gs_linkedin
+              </Text>
               <Field name="customURL">
                 {({ field, form }) => (
                   <InputGroup size="md">
@@ -196,7 +200,6 @@ function Shortener() {
                       placeholder="Enter custom short link here"
                       onChange={handleCustomChange}
                       value={customURLBody}
-                      marginTop="2"
                     />
                   </InputGroup>
                 )}
